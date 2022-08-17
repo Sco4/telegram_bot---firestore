@@ -321,7 +321,7 @@ const getTask = async (ctx)  =>{
     //let re = /Завдання [0-9]/;
     let resText = text.match(/Завдання [0-9]/ );
 
-    //matchAll = Array.from(matchAll);
+    //m465atchAll = Array.from(matchAll);
     //console.log(matchAll[0].input);
         if(resText !== null){
             console.log(resText);

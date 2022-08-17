@@ -1,20 +1,24 @@
 require('dotenv').config();
 const express = require('express');
-const TOKEN = process.env.TG_TOKEN;
-console.log(process.env);
 const { Telegraf } = require('telegraf');
-const PORT = process.env.PORT || 3000;
 const { setInterval } = require('timers');
-const bot = new Telegraf(TOKEN)
 let fs = require('fs');
 const path = require('node:path');
 const http = require("http");
 
+const serviceAccount = require("./fb_config").fb_config;
+
+const TOKEN = process.env.TG_TOKEN;
+const PORT = process.env.PORT || 3000;
+
+const bot = new Telegraf(TOKEN)
 const app = express();
 
 setInterval(function() {
     http.get("http://kidspacebot.herokuapp.com");
 }, 600000);
+
+
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
@@ -147,8 +151,11 @@ tasksArray.forEach(el =>{
     summaryMark += el.tskMark;
 })
 
-console.log(summaryMark);
-const serviceAccount = require("./telegrambotkidspace-firebase-adminsdk-lgukw-50e8840bea.json");
+//console.log(summaryMark);
+
+//const express = require('express');
+
+//console.log(serviceAccount);
 
 
 initializeApp({
@@ -169,21 +176,7 @@ async function returnScore() {
      }
 
   
-async function writeArray(){
-    const myArr =[];
-    const arrFromBase = await returnScore(); 
-    arrFromBase.forEach(el =>{
-        //console.log(el.id, '=>', el.data());
-        //myArr.push([el.id, el.data().taskText])
-        myArr.push(el.id, el.data().score)
-        //console.log(el);
-    })
-    console.log(myArr);
-    //return myArr;
-    
-}
-
-returnScore();
+//returnScore();
 console.log('The Beginning');
 
   // Create a query against the collection

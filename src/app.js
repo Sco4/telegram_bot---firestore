@@ -1,5 +1,7 @@
+require('dotenv').config();
 const express = require('express');
-const { TOKEN } = require('./config.js');
+const TOKEN = process.env.TG_TOKEN;
+console.log(process.env);
 const { Telegraf } = require('telegraf');
 const PORT = process.env.PORT || 3000;
 const { setInterval } = require('timers');

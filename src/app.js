@@ -2,12 +2,17 @@ const express = require('express');
 const { TOKEN } = require('./config.js');
 const { Telegraf } = require('telegraf');
 const PORT = process.env.PORT || 3000;
-var http = require("http");
+const { setInterval } = require('timers');
+const bot = new Telegraf(TOKEN)
+let fs = require('fs');
+const path = require('node:path');
+const http = require("http");
+
+const app = express();
 
 setInterval(function() {
     http.get("http://kidspacebot.herokuapp.com");
-}, 600000); // every 5 minutes (300000)
-
+}, 600000);
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
@@ -223,17 +228,13 @@ function addAnswerToTask(userName, hisAnswer){
       });
     }
 
-const app = express()
-const bot = new Telegraf(TOKEN)
 
-let fs = require('fs');
-const path = require('node:path');
-const { setInterval } = require('timers');
-const e = require('express');
 
-const dirName = 'C:\\Users\\stask\\My Drive\\KID space\\01\\';
+//const e = require('express');
 
-const inl_KB = {
+//const dirName = 'C:\\Users\\stask\\My Drive\\KID space\\01\\';
+
+/* const inl_KB = {
     reply_markup: {
         inline_keyboard: [
           [
@@ -244,7 +245,7 @@ const inl_KB = {
           ]
         ]
         }
-    }
+    } */
 
 
 

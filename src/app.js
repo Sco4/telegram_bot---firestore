@@ -2,6 +2,12 @@ const express = require('express');
 const { TOKEN } = require('./config.js');
 const { Telegraf } = require('telegraf');
 const PORT = process.env.PORT || 3000;
+var http = require("http");
+
+setInterval(function() {
+    http.get("http://kidspacebot.herokuapp.com");
+}, 600000); // every 5 minutes (300000)
+
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');

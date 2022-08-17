@@ -1,6 +1,7 @@
-const express = require('express')
-const { PORT, TOKEN } = require('./config.js')
+const express = require('express');
+const { TOKEN } = require('./config.js');
 const { Telegraf } = require('telegraf');
+const PORT = process.env.PORT || 3000;
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
 const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');

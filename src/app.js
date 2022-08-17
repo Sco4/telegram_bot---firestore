@@ -318,10 +318,10 @@ bot.start(async ctx => {
 
 const getTask = async (ctx)  =>{
     let text = ctx.message.text;
-    //let re = /Завдання [0-9]/;
+    //let re = /За222вдання [0-9]/;
     let resText = text.match(/Завдання [0-9]/ );
 
-    //m465atchAll = Array.from(matchAll);
+    //m46atchAll = Array.from(matchAll);
     //console.log(matchAll[0].input);
         if(resText !== null){
             console.log(resText);

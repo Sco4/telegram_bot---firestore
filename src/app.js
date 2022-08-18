@@ -437,6 +437,8 @@ bot.hears('Мої бали', async ctx => {
 
     const userRef = db.collection('users').doc(name)
     console.log('Одразу після звертання');
+    console.log(userRef);
+
         const doc = await userRef.get();
 
         console.log(doc);

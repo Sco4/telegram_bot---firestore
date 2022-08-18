@@ -1,10 +1,13 @@
 require('dotenv').config();
 const express = require('express');
-const { Telegraf } = require('telegraf');
+const { Telegraf, Markup } = require('telegraf');
 const { setInterval } = require('timers');
 let fs = require('fs');
 const path = require('node:path');
 const http = require("http");
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
+//const { Markup } = require('telegraf');
 
 const serviceAccount = require("./fb_config").fb_config;
 
@@ -18,12 +21,6 @@ setInterval(function() {
     http.get("http://kidspacebot.herokuapp.com");
 }, 600000);
 
-
-
-const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestore');
-
-const { Markup } = require('telegraf');
 
 let isSco4Talking = false;
 let currentTaskID = '001';
@@ -430,9 +427,16 @@ bot.hears('1722', ctx => {
 
 
 bot.hears('Мої бали', async ctx => {
+
+    console.log('Натиснув кнопку запросити бали');
+
     await ctx.deleteMessage(ctx.message.message_id);
     const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
+
+    console.log('До звертання до бази');
+
     const userRef = db.collection('users').doc(name);
+    console.log('Одразу після звертання');
         const doc = await userRef.get();
         const myScore = await doc.data().score;
         

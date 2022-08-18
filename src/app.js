@@ -437,12 +437,13 @@ bot.hears('Мої бали', async ctx => {
 
     const userRef = db.collection('users').doc(name)
     console.log('Одразу після звертання');
-        const doc = await userRef.get().catch(
-            (error)=>{
-                console.error()
-            }
-        );
+        const doc = await userRef.get();
+
+        console.log(doc);
+
         const myScore = await doc.data().score;
+
+        console.log(myScore);
         
     console.log(name + ' запросив бали');
 

@@ -16,8 +16,8 @@ const bot = new Telegraf(TOKEN)
 const app = express();
 
 setInterval(function() {
-    http.get("http://kidspacebot.herokuapp.com");
-}, 600000);
+    http.get("http://https://telegrambotkidspace.uc.r.appspot.com/");
+}, 300000);
 
 
 

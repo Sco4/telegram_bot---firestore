@@ -1,1 +1,15 @@
 runtime: nodejs16
+
+env_variables:
+  TG_TOKEN: "5583509393:AAFNzZI49CT28-2SERy4SQ3_FjBiMjwvA9o"
+  FB_TYPE: "service_account"
+  FB_PROJECT_ID: "telegrambotkidspace"
+  FB_PRIVATE_KEY_ID: "106eab62d8b1b7ed1eb11352719786988398673f"
+  FB_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCrKkZ0I0xmIjdB\nTKK/Q4D9agZH3YklyYugJyy6cZX7sO3n3WY66zDluf2Qiml1o+Am/3xcEXR8qC5F\nufTLIiN1ooX/zeWGvCqZAS1JL+L+CLKcGhi12PB5rsG7UyStTlmcqMiPhxD4Ol2c\ndVWkchx/PfjiDHci7z+0TOiAU2BXJu0ExUCzU9+3P8N1/CAeGC9nV25X1oMiSKKW\n3CiSlmLrzcdT7zIqw7WWvuZsHQEZBDZZMebf/CuA4szNQzq8bsKSXeo8fDk749hI\nIA1C1zTg0Tb+/jL/qH+J3Zsc07wqrRI1Ul51mbaNS9eRd8gNKNIh8Cbu65ACFHLR\nmi5sVq0DAgMBAAECggEADt8HbAO9GYqTfmroIPH+fQX/MbM/vTa7mNiOfExuGYYP\nxXto7GmOwAbezvYXn47zZLAB4AXsNwBttMUpTZTTu965Abaj4IbstIpzos40TJn4\n2rMxvmrwycGzN1FL+Hq8Mm4/rqivgsGfbH6NSFJZw3xg6VLn7vMWd9XOxYd48Vld\n3U5gljnS8o6rKJzlCfxN4ogGeYqDmBMAxrv346VObSZCnpSpgnBTH/ShRIQLB2J3\ndRFhFBkvbc31ljjE0zZGvWvk3Up8OiPrvlWRDKNHMUzJxu1GVmB7TX0HXFsy403M\n5yk4ZZPwUN7fjvm2LkfvBvOpc1pCdoEAf8Qn5eQjkQKBgQDo9Qm5Qs09QFRcK1hA\nqrQ/9myqKuyyPyQdoRipCE0FZwTpQU0hqjs+f2MPRNyWCJ2ETfH5ocUDz9U7WxGc\nHXwBeI0Dl8vskKNP9jC79dUnpA/ryNzNx2V8JDefWjlZi1AUbQcWNpCNG/8D84en\nVZQIlez7X+jPBCI1/jKnsi/mNwKBgQC8GIijvKtE12uNFwYrkp8yqcACa0XXmtId\neY0/twM5ntSRPnS9uha8rRXUC2hc4e+Dwah/BospLP0674Z0zy9zsak71V08XY4j\nVE3CrgQgokZTaCsMwUMHFckDhVfKAcs5FfqN/NcU55SQGCvIPKgPpOOXJXVovzTp\nnbF0eLBJlQKBgB2seNycYcBXnWdQLiGunN846IaUiSn7WQJdLuL5J7Z0dO+xXb3Y\nDUvctiWPw/loh4f+1b/Sl2Hw61xwMUINj2owjOXURCmSEvtwhKysl8ZA47ZJE7cy\nmv7BLkSiHYQGduDjMm/l62vOESHTt4fdIsolLtamVOVpxWHTS2iJDgjpAoGAR7HC\nQ0bisTa7E+g2vd0BOTpiqYlh8bBdbkaqhCKp5AiaVVJNBRQtHnWK4GwIt36W4M2r\n/97qpCM10oUB5vwhxiNtshS9mQi/6M91ZEMX56hyzc/iuNXhSo4PNHxa3fCZGYU7\nH2vEP3+VrObJqWUVWgErjq0Ed4yKCpHE1fQ6nZECgYEAvEYmZC+Ix6vSSzOapKot\n/5S/ne3ufD+ZVjgee8aZI9tiiW/95GJFJAoE78N6i1Be6e5bZRdYHKmj/uEj34lY\ndJoEV0rajkfKu/gg+gqKLp+uKBWxuqwNblA2ydxPU9Lahl7piMy2Mg1SFDBSfkot\niOTRHroYhoOn54CahyNtlow=\n-----END PRIVATE KEY-----\n"
+  FB_CLIENT_EMAIL: "firebase-adminsdk-lgukw@telegrambotkidspace.iam.gserviceaccount.com"
+  FB_CLIENT_ID: "105076030088349084170"
+  FB_AUTH_URI: "https://accounts.google.com/o/oauth2/auth"
+  FB_TOKEN_URI: "https://oauth2.googleapis.com/token"
+  FB_AUTH_PROVIDER_X509_CERT_URL: "https://www.googleapis.com/oauth2/v1/certs"
+  FB_CLIENT_X509_CERT_URL: "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-lgukw%40telegrambotkidspace.iam.gserviceaccount.com"
+

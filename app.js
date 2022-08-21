@@ -6,6 +6,7 @@ let fs = require('fs');
 const path = require('node:path');
 const http = require("http");
 
+//const serviceAccount = require("./fb_config").fb_config;
 const serviceAccount = require("./fb_config").fb_config;
 
 const TOKEN = process.env.TG_TOKEN;

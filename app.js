@@ -15,10 +15,13 @@ const PORT = process.env.PORT || 3000;
 const bot = new Telegraf(TOKEN)
 const app = express();
 
-/* setInterval(function() {
-    http.get("http://https://telegrambotkidspace.uc.r.appspot.com/");
+
+
+
+setInterval(function() {
+    http.get("http://telegrambotkidspace.uc.r.appspot.com/");
 }, 300000);
- */
+
 
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');

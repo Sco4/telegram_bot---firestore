@@ -15,10 +15,10 @@ const PORT = process.env.PORT || 3000;
 const bot = new Telegraf(TOKEN)
 const app = express();
 
-setInterval(function() {
+/* setInterval(function() {
     http.get("http://https://telegrambotkidspace.uc.r.appspot.com/");
 }, 300000);
-
+ */
 
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
@@ -497,8 +497,25 @@ bot.on('text',async ctx => {
         const doc = await userRef.get();
         const isMainAnswer = await doc.data().isAnswer;
 
-        getTask(ctx);
-        getHint(ctx);
+        
+    //let re = /За222вдання [0-9]/;
+    let textTask = text.match(/Завдання [0-9]/ );
+    let textHint = text.match(/Підказка до завд. [0-9]/ );
+    //m46atchAll = Array.from(matchAll);
+    //console.log(matchAll[0].input);
+        if(textTask !== null){
+          getTask(ctx);
+        } else{
+            if(textHint !== null){
+                getHint(ctx);
+             }
+        
+        else{
+
+        
+        
+        
+       // await getHint(ctx);
 
         if((ctx.message.from.id === 370562012) && isSco4Talking){
 
@@ -550,7 +567,7 @@ bot.on('text',async ctx => {
             }
         }
         /************************************ */
-    
+        }}
     })
 
 

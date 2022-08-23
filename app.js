@@ -39,9 +39,11 @@ app.get("/", async (req, res) => {
     res.send(" ");
 });
 
-app.listen(process.env.PORT || 3000, () => {
+app.listen(PORT, () => console.log(`My server is running on port ${PORT}`))
+
+/* app.listen(process.env.PORT || 3000, () => {
   console.log(`Listening on port ${process.env.PORT || 4000}`);
-});
+}); */
 
 const stayAlive = async (mainAsyncFunc) => {
   const intervalId = setInterval(sendAppRequest, 60000);

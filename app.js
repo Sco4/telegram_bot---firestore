@@ -305,7 +305,10 @@ function addAnswerToTask(userName, hisAnswer){
 
 
 bot.start(async ctx => {
-    ctx.reply('ВПРИВІТ!',mainMenuKB());
+    const appeal = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
+    ctx.reply(`Вітаю тебе, ${appeal}! Я KidSpaceBot - буду допомагати тобі у навчанні.`+'\n'+
+'Поки що я вмію не дуже багато, але... Все попереду 😉'+'\n'+
+'Дякую за реєстрацію та до нових оновлень!' ,mainMenuKB());
     console.log(ctx.message)
     const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
   
@@ -451,7 +454,7 @@ const readScore = (array,ctx) =>{
     let i = 1;
     let results = '';
     array.forEach(el =>{
-      if(el.name === ctx.message.from.username){
+      if(el.name === ctx.message.from.username || el.name === ctx.message.from.first_name){
         results += '😉' + i++ + '. ' + el.name + ': ' + el.score +'\n';
       }
       else{

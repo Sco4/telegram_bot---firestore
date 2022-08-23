@@ -18,9 +18,41 @@ const app = express();
 
 
 
-setInterval(function() {
+/* setInterval(function() {
     http.get("http://telegrambotkidspace.uc.r.appspot.com/");
-}, 300000);
+}, 300000); */
+
+
+const appUrl = "http://telegrambotkidspace.uc.r.appspot.com/";
+
+app.get("/script1", async (req, res) => {
+    res.send("running script 1");
+    stayAlive(script1);
+});
+
+app.get("/script2", async (req, res) => {
+    res.send("running script 2");
+    stayAlive(script2);
+});
+
+app.get("/", async (req, res) => {
+    res.send(" ");
+});
+
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`Listening on port ${process.env.PORT || 4000}`);
+});
+
+const stayAlive = async (mainAsyncFunc) => {
+  const intervalId = setInterval(sendAppRequest, 60000);
+  await mainAsyncFunc();
+  clearInterval(intervalId);
+};
+
+const sendAppRequest = () => {
+  console.log("Stayin alive");
+  axios.get(appUrl);
+};
 
 
 
@@ -464,7 +496,7 @@ return results;
 
 bot.hears('Рейтинг учасників', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
-    const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
+    //const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
         let myArr =[];
         const arrFromBase = await returnScore(); 
         

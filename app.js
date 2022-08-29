@@ -151,9 +151,9 @@ const hints = [
 
 let summaryMark = 0;
 
-tasksArray.forEach(el =>{
+/* tasksArray.forEach(el =>{
     summaryMark += el.tskMark;
-})
+}) */
 
 //console.log(summaryMark);
 
@@ -178,6 +178,46 @@ async function returnScore() {
     
          return snapshot;
      }
+
+     async function returnSumScore() {
+        const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
+        const userRef = db.collection('users').doc(name);
+        const doc = await userRef.get();
+        //const str = currentTaskID.toString();
+        const myScore = doc.data();
+
+        const scoreRef = db.collection('users');
+        const snapshot = await scoreRef.where('hisAnswer', '!=', false).get();
+          if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }  
+       
+            return snapshot;
+        }
+
+
+     async function returnTasks() {
+        const scoreRef = db.collection('tasks');
+        const snapshot = await scoreRef.where('taskID', '!=', false).get();
+          if (snapshot.empty) {
+          console.log('No matching documents.');
+          return;
+        }  
+       
+            return snapshot;
+        }   
+        
+        async function returnHints() {
+            const scoreRef = db.collection('hints');
+            const snapshot = await scoreRef.where('hintID', '!=', false).get();
+              if (snapshot.empty) {
+              console.log('No matching documents.');
+              return;
+            }  
+           
+                return snapshot;
+            } 
 
   
 //returnScore();
@@ -204,8 +244,14 @@ console.log('The Beginning');
 
 
 
+
+
+
   async function addAnswer(userName, data) {
-    await db.collection('users').doc(userName).update(data);
+    await db.collection('users').doc(userName).set(
+        {
+        "answer": data,
+        }, { merge: true });
     
     }
 /******************* */
@@ -264,34 +310,52 @@ function addAnswerToTask(userName, hisAnswer){
         ]).resize()
     }
 
+
+
+    
+    
+
+
     //клавіатура "Завдання"
-    function  tasksKB(){
-        return Markup.keyboard([
-           ['Головне меню'],
-           ['Завдання 1'],
-           ['Завдання 2'],
-           ['Завдання 3'],
-           ['Завдання 4'],
-           ['Завдання 5'],
-           ['Завдання 6'],
-           ['Завдання 7'],
-           
-        ]).resize()
+  async function  tasksKB(){
+
+
+        let arrKB =[['Головне меню']];
+        const arrFromBase =  await returnTasks();
+        let i =1;
+
+        arrFromBase.forEach(el =>{
+            
+            arrKB.push(['Завдання ' + (i)])
+            i++;
+            
+        })
+
+        return Markup.keyboard(arrKB).resize()
     }
 
-        //клавіатура "Завдання"
-        function  hintsKB(){
-            return Markup.keyboard([
-               ['Головне меню'],
-               ['Підказка до завд. 1'],
-               ['Підказка до завд. 2'],
-               ['Підказка до завд. 3'],
-               ['Підказка до завд. 4'],
-               ['Підказка до завд. 5'],
-               ['Підказка до завд. 6'],
-               ['Підказка до завд. 7'],
-               
-            ]).resize()
+
+    
+
+
+    async function  hintsKB(){
+
+
+        let arrKB =[['Головне меню']];
+        const arrFromBase =  await returnHints();
+        //console.log(arrFromBase);
+        let i =1;
+
+        arrFromBase.forEach(el =>{
+            
+            arrKB.push(['Підказка до завд. ' + (i)])
+            
+            i++;
+            
+        })
+        //console.log(arrKB)
+        return Markup.keyboard(arrKB).resize()
+       
         }
 
      //клавіатура "Додати завдання"
@@ -335,28 +399,48 @@ const getTask = async (ctx)  =>{
     //console.log(matchAll[0].input);
         if(resText !== null){
             console.log(resText);
-        
+        let taskName ='';
         currentTaskID = +(text.split(' ')[1]);
+        currentTaskID.toString().length<2?
+
+        taskName = '0' + '0' + currentTaskID:
+        taskName = '0' + currentTaskID;
+
         const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
         //await ctx.deleteMessage(ctx.message.message_id);
         console.log (name + ' Просять завдання ' +currentTaskID)
-        const tasFromArrNum = currentTaskID-1;
+
+        const tasksRef = db.collection('tasks').doc(taskName);
+        const doc2 = await tasksRef.get();
+        const niceText = await doc2.data().taskText.replace( /Y/g, '\n');
+        //const niceText = taskText.replace( /$/g, '\n');
+       const taskMark = await doc2.data().taskMark;
+//console.log(niceText);
+        //const taskFromBase = currentTaskID-1;
         //const usersRef = db.collection('users').doc(name);
     
         const userRef = db.collection('users').doc(name);
             const doc = await userRef.get();
             //const str = currentTaskID.toString();
             const myScore = doc.data();
+           // console.log(myScore);
     //console.log(myScore['1']);
-    if (myScore[currentTaskID]){
+    if (myScore.answer[currentTaskID]){
+        let str = '';
+        if (myScore.answer[currentTaskID].hisMark !== null){
+            str = '✅ Вам нараховано '+ myScore.answer[currentTaskID].hisMark+ ' балів';
+        }
+        else{
+            str = '☝️ Ваше завдання ще на перевірці';
+        }
         ctx.reply('Завдання '+currentTaskID+'. ' +'\n'  +'\n'+
-        'Максимальна кількість балів: ' + tasksArray[tasFromArrNum].tskMark +'\n'+ '\n'+tasksArray[tasFromArrNum].tskText+'\n'+'\n'  +'\n'+ '🟢 Ви вже відповіли 🟢'+'\n'  +'\n'+
+        'Максимальна кількість балів: ' + taskMark +'\n'+ '\n'+niceText+'\n'+'\n'  +'\n'+ '🟢 Ви вже відповіли'+'\n'  +'\n'+ str + '\n'  +'\n'+
         '📌 Введіть нову відповідь та відправте повідомлення'+'\n'  +'\n'+
         'Або перейдіть в Головне меню 👇👇👇', mainMenu())
     }
     else{
     ctx.reply('Завдання '+currentTaskID+'. '+'\n'  +'\n'+
-    'Максимальна кількість балів: ' + tasksArray[tasFromArrNum].tskMark +'\n'+ '\n'+tasksArray[tasFromArrNum].tskText+'\n'+'\n' + enterAnswer, mainMenu())
+    'Максимальна кількість балів: ' + taskMark +'\n'+ '\n'+niceText+'\n'+'\n' + enterAnswer, mainMenu())
     }
     
         await db.collection("users").doc(name).update({
@@ -373,20 +457,37 @@ const getTask = async (ctx)  =>{
             let text = ctx.message.text;
             //let re = /Завдання [0-9]/;
             let resText = text.match(/Підказка до завд. [0-9]/ );
-        
+            let hintName ='';
             //matchAll = Array.from(matchAll);
             //console.log(matchAll[0].input);
                 if(resText !== null){
                     console.log(resText);
                 
                 let hintID = +(text.split(' ')[3]);
+                hintID.toString().length<2?
+
+        hintName = '0' + '0' + hintID:
+        hintName = '0' + hintID;
+        console.log(hintName);
                 const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
                 //await ctx.deleteMessage(ctx.message.message_id);
                 console.log (name + ' Просить підказку ' +hintID)
-                const hintFromArrNum = hintID-1;
+                //const hintFromArrNum = hintID-1;
                 //const usersRef = db.collection('users').doc(name);
             
-            ctx.reply(hints[hintFromArrNum].hintsText, mainMenu())
+           
+                const hintsRef = db.collection('hints').doc(hintName);
+                const doc2 = await hintsRef.get();
+                const niceText = await doc2.data().hintText.replace( /Y/g, '\n');
+                //const niceText = taskText.replace( /$/g, '\n');
+              // const taskMark = await doc2.data().taskMark;
+        //console.log(niceText);
+                //const taskFromBase = currentTaskID-1;
+                //const usersRef = db.collection('users').doc(name);
+                
+                
+                ctx.reply('Підказка до завдання '+ hintID+ '\n' + '\n' + niceText, mainMenu())
+
             }
         }
 
@@ -400,7 +501,7 @@ return function(error){
 
 bot.hears('Підказки до завдань', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
-    ctx.reply('Відкриваю підказки...',hintsKB());
+    ctx.reply('Відкриваю підказки...',await hintsKB());
 
  
 })
@@ -408,7 +509,7 @@ bot.hears('Підказки до завдань', async ctx => {
 
 bot.hears('Завдання', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
-    ctx.reply('Відкриваю завдання...',tasksKB());
+    ctx.reply('Відкриваю завдання...',await tasksKB());
 
  
 })
@@ -439,14 +540,37 @@ bot.hears('1722', ctx => {
 bot.hears('Мої бали', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
     const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
+    summaryMark =0;
+    let tasksNum =0;
+
+    //let myArr =[];
+    const arrFromBase = await returnTasks(); 
+    
+    arrFromBase.forEach(el =>{
+        summaryMark += +el.data().taskMark
+        tasksNum++;
+    })
+
+    
     const userRef = db.collection('users').doc(name);
         const doc = await userRef.get();
-        const myScore = await doc.data().score;
+        let myScore = 0;
+        let answNum = 0;
+        const answers = await doc.data().answer;
+        console.log(answers);
+        for (var key in answers) {
+            myScore += answers[key].hisMark;
+            answNum++;
+          }
+
+          //console.log(hisScore)
+        //const myScore = await doc.data().score;
         
     console.log(name + ' запросив бали');
 
     ctx.reply('🧠 МАКСИМАЛЬНО МОЖЛИВА КІЛЬКІСТЬ БАЛІВ: ' + summaryMark+ '\n'+'\n'
-    +name + ', у Вас '+ myScore + ' балів.');
+    +'✔ ' +name + ', у Вас '+ myScore + ' балів.'+'\n'+'\n'
+    +'➡ Розв\'язано завдань: ' +answNum + ' з ' + tasksNum);
 
 })
 
@@ -467,7 +591,7 @@ return results;
 
 bot.hears('Рейтинг учасників', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
-    const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
+    //const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
         let myArr =[];
         const arrFromBase = await returnScore(); 
         
@@ -546,7 +670,10 @@ bot.on('text',async ctx => {
             const data = {         
                 
                 [currentTaskID]:
-                {hisAnswer: text}
+                {hisAnswer: text,
+                hisMark: null
+                },
+                
             }
 
             addAnswer(name,data);

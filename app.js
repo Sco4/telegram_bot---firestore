@@ -44,6 +44,21 @@ initializeApp({
 
 const db = getFirestore();
 
+
+//**************** change name to userID *****************
+
+/* db.collection("users").doc("Тимур").get().then(async function (doc) {
+    if (doc && doc.exists) {
+        var data = doc.data();
+        
+        // saves the data to 'name'
+        db.collection("users").doc("1742522503").set(data);
+        await db.collection('users').doc('Тимур').delete();
+        //res();
+    }
+}); */
+
+
 async function returnScore() {
      const scoreRef = db.collection('users');
      const snapshot = await scoreRef.where('userName', '!=', false).get();
@@ -55,21 +70,7 @@ async function returnScore() {
          return snapshot;
      }
 
-   /*   async function returnSumScore() {
-        const name = ctx.message.from.username? ctx.message.from.username: ctx.message.from.first_name;
-        const userRef = db.collection('users').doc(name);
-        const doc = await userRef.get();
-        const scoreRef = db.collection('users');
-        const snapshot = await scoreRef.where('hisAnswer', '!=', false).get();
-          if (snapshot.empty) {
-          console.log('No matching documents.');
-          return;
-        }  
-       
-            return snapshot;
-        } */
-
-     async function returnTasks() {
+    async function returnTasks() {
         const scoreRef = db.collection('tasks');
         const snapshot = await scoreRef.where('taskID', '!=', false).get();
           if (snapshot.empty) {

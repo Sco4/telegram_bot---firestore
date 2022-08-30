@@ -357,7 +357,7 @@ bot.hears('1722', async ctx => {
         if(ctx.message.from.id === 370562012) {  
            const arrFromBase = await returnScore(); 
            arrFromBase.forEach(async el =>{
-               const userId = el.data().userId
+               const userId = el.data().userId.toString();
                console.log(userId)
                let hisScore=0;
                const answers = await el.data().answer;                  

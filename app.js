@@ -19,11 +19,11 @@ const app = express();
 
 
 
-
+/* 
 setInterval(function() {
     http.get("http://telegrambotkidspace.uc.r.appspot.com/");
 }, 300000);
-
+ */
 
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
@@ -33,6 +33,7 @@ const { Markup } = require('telegraf');
 
 let isSco4Talking = false;
 let currentTaskID = '001';
+const sco4_id = 370562012;
 
 let summaryMark = 0;
 const enterAnswer = '📌 Введіть вашу відповідь та відправте повідомлення';
@@ -106,22 +107,7 @@ console.log('The Beginning');
     }
 
 
-   /*  async function testQuery(){
-      
-        const query = db.collection('users');
-        const observer = query.onSnapshot(querySnapshot => {
-        console.log(querySnapshot);
-        
-      }, err => {
-        console.log(`Encountered error: ${err}`);
-      });
-      
-    };
-    
-    testQuery() */
-
-
-  async function addAnswer(userId, data) {
+async function addAnswer(userId, data) {
     await db.collection('users').doc(userId).set(
         {
         "answer": data,
@@ -180,6 +166,23 @@ function addAnswerToTask(userName, hisAnswer){
         return Markup.keyboard(arrKB).resize()
     }
 
+    async function  tasksKB_inline(){
+
+        let arrKB =[['Головне меню']];
+        const arrFromBase =  await returnTasks();
+        let i =1;
+
+        arrFromBase.forEach(el =>{
+            
+            arrKB.push(['Завдання ' + (i)])
+            i++;
+            
+        })
+
+        return inline_keyboard(arrKB).resize()
+    }
+
+
     async function  hintsKB(){
 
         let arrKB =[['Головне меню']];
@@ -201,10 +204,12 @@ function addAnswerToTask(userName, hisAnswer){
      const addTasksKB =() => {
         return Markup.keyboard([
             ['Оновити SCOREs'],
+            ['Хто відповів?'],
             ['Головне меню']
         ]).resize()
     }
 
+    //bot.telegram.sendMessage(sco4_id, "Hello man")
 
 
 bot.start(async ctx => {
@@ -353,12 +358,53 @@ bot.hears('1722', async ctx => {
 }}
 )
 
+async function returnWhoAnsw() {
+    const usersWhoAnsw = []; 
+    const scoreRef = db.collection('users');
+    const snapshot = await scoreRef.where('userName', '!=', false).get();
+      if (!snapshot.empty) {
+        const arrFromBase = snapshot;
+        
+        arrFromBase.forEach(async el =>{
+            // const userId = el.data().userId.toString();
+             //console.log(userId)
+             //let hisScore=0;
+             const answers = await el.data().answer;                  
+                if(answers){
+  
+                  for (var key in answers) {
+                     if(answers[key].hisMark == null){
+                      usersWhoAnsw.push([el.data().userId,el.data().sco4_name,key,answers[key].hisMark]);
+                     }
+                      }
+                  }
+                 
+                                    
+             });
+    }  
+       
+        return usersWhoAnsw;
+    }
+
+
+
+bot.hears('Хто відповів?', async ctx => {
+    if(ctx.message.from.id === 370562012) {  
+        const arr = await returnWhoAnsw();
+        const str = arr.join('\n');
+        console.log(arr)
+        console.log(str)
+        ctx.reply(str)
+    }}
+)
+
+
     bot.hears('Оновити SCOREs', async ctx => {
         if(ctx.message.from.id === 370562012) {  
            const arrFromBase = await returnScore(); 
            arrFromBase.forEach(async el =>{
                const userId = el.data().userId.toString();
-               console.log(userId)
+              // console.log(userId)
                let hisScore=0;
                const answers = await el.data().answer;                  
                   if(answers){
@@ -495,6 +541,9 @@ bot.on('text',async ctx => {
             ctx.reply('Вашу відповідь записано. Чекайте перевірки ;-)');
             ctx.reply(`Ви відповіли: ${text}`);
             ctx.reply('Відкриваю головне меню...',mainMenuKB());
+            const userRef = db.collection('users').doc(userId);
+        const doc = await userRef.get();
+        const sco4_name = await doc.data().sco4_name;
             const data = {         
                 
                 [currentTaskID]:
@@ -505,6 +554,7 @@ bot.on('text',async ctx => {
             }
 
             addAnswer(userId,data);
+            bot.telegram.sendMessage(sco4_id, `${userId}: ${sco4_name}: ${[currentTaskID]}: ${text}`)
             
             db.collection("users").doc(userId).update({
                 "isAnswer": false,

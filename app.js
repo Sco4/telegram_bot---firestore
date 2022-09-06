@@ -19,11 +19,11 @@ const app = express();
 
 
 
-/* 
+
 setInterval(function() {
     http.get("http://telegrambotkidspace.uc.r.appspot.com/");
 }, 300000);
- */
+
 
 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');

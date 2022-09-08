@@ -330,6 +330,7 @@ return function(error){
 }
 
 bot.hears('Підказки до завдань', async ctx => {
+    const userId = ctx.message.from.id.toString();
     await ctx.deleteMessage(ctx.message.message_id);
     ctx.reply('Відкриваю підказки...',await hintsKB());
     db.collection("users").doc(userId).update({

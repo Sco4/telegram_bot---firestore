@@ -32,7 +32,7 @@ const { getFirestore, Timestamp, FieldValue } = require('firebase-admin/firestor
 const { Markup } = require('telegraf');
 
 let isSco4Talking = false;
-let currentTaskID = '001';
+//let currentTaskID = '001';
 const sco4_id = 370562012;
 
 let summaryMark = 0;
@@ -242,9 +242,9 @@ const getTask = async (ctx)  =>{
     //m46atchAll = Array.from(matchAll);
     //console.log(matchAll[0].input);
         if(resText !== null){
-            console.log(resText);
+            //console.log(resText);
         let taskName ='';
-        currentTaskID = +(text.split(' ')[1]);
+        let currentTaskID = +(text.split(' ')[1]);
         currentTaskID.toString().length<2?
 
         taskName = '0' + '0' + currentTaskID:
@@ -289,6 +289,7 @@ const getTask = async (ctx)  =>{
     
         await db.collection("users").doc(userId).update({
             "isAnswer": true,
+            "tempTaskNum": currentTaskID
         }).catch(
             (error)=>{
                 console.error()
@@ -497,6 +498,7 @@ bot.hears('Головне меню', async ctx => {
 
     db.collection("users").doc(userId).update({
         "isAnswer": false,
+        "tempTaskNum": 0
     });
   
 })
@@ -509,7 +511,7 @@ bot.on('text',async ctx => {
         const userRef = db.collection('users').doc(userId);
         const doc = await userRef.get();
         const isMainAnswer = await doc.data().isAnswer;
-
+        const currentTaskID = await doc.data().tempTaskNum;
     let textTask = text.match(/Завдання [0-9]/ );
     let textHint = text.match(/Підказка до завд. [0-9]/ );
         if(textTask !== null){
@@ -558,6 +560,7 @@ bot.on('text',async ctx => {
             
             db.collection("users").doc(userId).update({
                 "isAnswer": false,
+                "tempTaskNum": 0
             });
        
         }
@@ -570,8 +573,10 @@ bot.on('text',async ctx => {
     //ctx.reply(`${appeal} сказав ${text}`);
     await ctx.deleteMessage(ctx.message.message_id);
     console.log(`${appeal} сказав ${text}`)
-   // let text = ctx.message.text;
-            //let re = /Завдання [0-9]/;
+    db.collection("users").doc(userId).update({
+        //"isAnswer": false,
+        "tempTaskNum": 0
+    });
             let resText = text.match(/Підказка до завд. [0-9]/ );
             if(resText == null){
     ctx.reply('Відкриваю головне меню...',mainMenuKB());

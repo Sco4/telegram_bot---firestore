@@ -332,7 +332,10 @@ return function(error){
 bot.hears('Підказки до завдань', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
     ctx.reply('Відкриваю підказки...',await hintsKB());
-
+    db.collection("users").doc(userId).update({
+        "isAnswer": false,
+        //"tempTaskNum": 0
+    });
  
 })
 
@@ -340,7 +343,10 @@ bot.hears('Підказки до завдань', async ctx => {
 bot.hears('Завдання', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
     ctx.reply('Відкриваю завдання...',await tasksKB());
-
+    db.collection("users").doc(userId).update({
+        "isAnswer": false,
+        //"tempTaskNum": 0
+    });
  
 })
 
@@ -456,6 +462,11 @@ bot.hears('Мої бали', async ctx => {
     +'✔ ' +name + ', у Вас '+ myScore + ' балів.'+'\n'+'\n'
     +'➡ Розв\'язано завдань: ' +answNum + ' з ' + tasksNum);
 
+    db.collection("users").doc(userId).update({
+        "isAnswer": false,
+        //"tempTaskNum": 0
+    });
+
 })
 
 const readScore = (array,ctx) =>{
@@ -487,6 +498,10 @@ bot.hears('Рейтинг учасників', async ctx => {
         myArr = myArr.sort((a, b) => a.score > b.score ? -1 : 1);
         //console.log(myArr);
         ctx.reply(readScore(myArr,ctx));
+        db.collection("users").doc(userId).update({
+            "isAnswer": false,
+            //"tempTaskNum": 0
+        });
 
     })
 
@@ -574,7 +589,7 @@ bot.on('text',async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
     console.log(`${appeal} сказав ${text}`)
     db.collection("users").doc(userId).update({
-        //"isAnswer": false,
+        "isAnswer": false,
         "tempTaskNum": 0
     });
             let resText = text.match(/Підказка до завд. [0-9]/ );

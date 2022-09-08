@@ -343,6 +343,7 @@ bot.hears('Підказки до завдань', async ctx => {
 bot.hears('Завдання', async ctx => {
     await ctx.deleteMessage(ctx.message.message_id);
     ctx.reply('Відкриваю завдання...',await tasksKB());
+    const userId = ctx.message.from.id.toString();
     db.collection("users").doc(userId).update({
         "isAnswer": false,
         //"tempTaskNum": 0

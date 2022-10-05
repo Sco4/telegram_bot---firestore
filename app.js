@@ -12,7 +12,7 @@ const serviceAccount = require("./fb_config").fb_config;
 
 
 const TOKEN = process.env.TG_TOKEN;
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8800;
 
 const bot = new Telegraf(TOKEN)
 const app = express();
@@ -44,6 +44,7 @@ initializeApp({
 });
 
 const db = getFirestore();
+//updateTasks();
 
 
 //**************** change name to userID *****************
@@ -359,6 +360,45 @@ async function rewriteScore(userId, score) {
         }, { merge: true });
     
     }
+
+    async function addIsActual(taskID) {
+        await db.collection('tasks').doc(taskID).set(
+            {
+            "isActual": true,
+            }, { merge: true });
+        
+        }
+
+        async function updateTasks() {
+            //const usersWhoAnsw = []; 
+            const tasksRef = db.collection('tasks');
+            const snapshot = await tasksRef.where('taskID', '!=', false).get();
+              if (!snapshot.empty) {
+                const arrFromBase = snapshot;
+                
+                arrFromBase.forEach(async el =>{
+                
+                     let tskID = await el.data().taskID;
+                     if (tskID.length === 1){
+                        tskID = '00'+tskID;
+                     }
+                     if (tskID.length === 2){
+                        tskID = '0'+tskID;
+                     }              
+                     addIsActual(tskID);
+                                 
+                         
+                                            
+                     });
+            }  
+               
+           }
+
+
+
+
+
+
 
 
 bot.hears('1722', async ctx => {
